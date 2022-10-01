@@ -4,16 +4,15 @@ using System.Reflection.Metadata;
 
 namespace Fitlance.Models
 {
-    [Table("Clients")]
-    public class Client
+    [Table("Trainers")]
+    public class Trainer
     {
-        public int? Id { get; set; }
-        public DateTime CreateTime { get; set; }
+        public int Id { get; set; }
         public string? FirstName { get; set; }
-        public int? LastName { get; set; }
+        public string? LastName { get; set; }
         public EmailAddressAttribute? EmailAddress { get; set; }
         public string? City { get; set; }
-        public int? ZipCode { get; set; }
+        public int? Zipcode { get; set; }
         public Blob ProfileImage { get; set; }
         public string? Bio { get; set; }
         public List<Appointment>? Appointments { get; set; }
