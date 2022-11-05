@@ -1,19 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection.Metadata;
 
-namespace Fitlance.Models
+
+namespace Fitlance.Models;
+
+[Table("Trainers")]
+public class Trainer
 {
-    [Table("Trainers")]
-    public class Trainer
-    {
-        public int ID { get; set; }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? EmailAddress { get; set; }
-        public string? City { get; set; }
-        public int? Zipcode { get; set; }
-        public string? Bio { get; set; }
-        public List<Appointment>? Appointments { get; set; }
-    }
+    [Column("TrainerId")]
+    public int Id { get; set; }
+    [Required(ErrorMessage = "First name is required")]
+    public string? FirstName { get; set; }
+    [Required(ErrorMessage = "Last name is required")]
+    public string? LastName { get; set; }
+    public string? City { get; set; }
+    public int? Zipcode { get; set; }
+    public string? Bio { get; set; }
+    public List<Appointment>? Appointments { get; set; }
 }

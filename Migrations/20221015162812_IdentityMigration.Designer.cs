@@ -4,6 +4,7 @@ using Fitlance.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fitlance.Migrations
 {
     [DbContext(typeof(FitlanceContext))]
-    partial class FitlanceContextModelSnapshot : ModelSnapshot
+    [Migration("20221015162812_IdentityMigration")]
+    partial class IdentityMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -325,7 +327,7 @@ namespace Fitlance.Migrations
                     b.ToTable("AspNetUserTokens", "Fitlance");
                 });
 
-            modelBuilder.Entity("Fitlance.Entities.User", b =>
+            modelBuilder.Entity("Fitlance.Models.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
@@ -398,11 +400,11 @@ namespace Fitlance.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Fitlance.Entities.User", b =>
+            modelBuilder.Entity("Fitlance.Models.User", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithOne()
-                        .HasForeignKey("Fitlance.Entities.User", "Id")
+                        .HasForeignKey("Fitlance.Models.User", "Id")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
