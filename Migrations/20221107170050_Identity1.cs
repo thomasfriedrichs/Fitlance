@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Fitlance.Migrations
 {
-    public partial class IdentityMigration : Migration
+    public partial class Identity1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,43 +51,6 @@ namespace Fitlance.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Clients",
-                schema: "Fitlance",
-                columns: table => new
-                {
-                    ClientId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ZipCode = table.Column<int>(type: "int", nullable: true),
-                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clients", x => x.ClientId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Trainers",
-                schema: "Fitlance",
-                columns: table => new
-                {
-                    TrainerId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Zipcode = table.Column<int>(type: "int", nullable: true),
-                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Trainers", x => x.TrainerId);
                 });
 
             migrationBuilder.CreateTable(
@@ -212,7 +175,13 @@ namespace Fitlance.Migrations
                 schema: "Fitlance",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ZipCode = table.Column<int>(type: "int", nullable: true),
+                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -232,44 +201,28 @@ namespace Fitlance.Migrations
                 {
                     AppointmentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TrainerId = table.Column<int>(type: "int", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Adress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AppointmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Appointments", x => x.AppointmentId);
                     table.ForeignKey(
-                        name: "FK_Appointments_Clients_ClientId",
-                        column: x => x.ClientId,
+                        name: "FK_Appointments_Users_UserId",
+                        column: x => x.UserId,
                         principalSchema: "Fitlance",
-                        principalTable: "Clients",
-                        principalColumn: "ClientId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Appointments_Trainers_TrainerId",
-                        column: x => x.TrainerId,
-                        principalSchema: "Fitlance",
-                        principalTable: "Trainers",
-                        principalColumn: "TrainerId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Appointments_ClientId",
+                name: "IX_Appointments_UserId",
                 schema: "Fitlance",
                 table: "Appointments",
-                column: "ClientId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Appointments_TrainerId",
-                schema: "Fitlance",
-                table: "Appointments",
-                column: "TrainerId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -346,14 +299,6 @@ namespace Fitlance.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users",
-                schema: "Fitlance");
-
-            migrationBuilder.DropTable(
-                name: "Clients",
-                schema: "Fitlance");
-
-            migrationBuilder.DropTable(
-                name: "Trainers",
                 schema: "Fitlance");
 
             migrationBuilder.DropTable(

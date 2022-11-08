@@ -1,21 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Fitlance.Models;
+namespace Fitlance.Entities;
 
 [Table("Appointments")]
 public class Appointment
 {
     [Column("AppointmentId")]
     public int Id { get; set; }
-    [ForeignKey("TrainerId")]
-    public int TrainerId { get; set; }
-    [ForeignKey("ClientId")]
-    public int ClientId { get; set; }
-    public string? Location { get; set; }
+    [ForeignKey("UserId")]
+    public string? UserId { get; set; }
+    public string? Adress { get; set; }
     public DateTime CreateTime { get; set; }
     public DateTime AppointmentDate { get; set; }
-    public DateTime UpdateTime { get; set; }
     public bool IsActive { get; set; }
 
 }

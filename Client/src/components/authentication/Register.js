@@ -1,21 +1,22 @@
 import React from "react";
-import { Formik } from "formik";
+import { Field, Formik, Form } from "formik";
 
 import { RegisterSchema } from "../../validators/Validate";
 import { useAuth } from "./../../context/AuthContext";
 
 const Register = () => {
-  const { register } = useAuth();
+  const { onRegister } = useAuth();
 
   const initialValues = {
     username:"",
     email: "",
-    password: ""
+    password: "",
+    role: ""
   };
 
   const handleRegistration = ( values) => {
-      console.log(values.username);
-      register(values.username, values.email, values.password);
+    console.log(values);
+    onRegister(values.username, values.email, values.password, values.role);
   };
 
   return (
@@ -39,7 +40,7 @@ const Register = () => {
         return (
           <div className="flex flex-col gap-y-4">
             <h1 className="text-3xl text-center">Sign up to continue</h1>
-            <form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit}>
               <div className="my-4">
                 <div className="w-full">
                   <input
@@ -94,6 +95,21 @@ const Register = () => {
                   )}
                 </div>
               </div>
+              <div 
+                role="group" 
+                id="radio-group" 
+                aria-labelledby="radio-group"
+                className="flex flex-row justify-around"
+              >
+                <label htmlFor="user" className={` w-36 text-center rounded-full ${values.role === "User" ? "bg-green" : ""}`}>
+                  <Field type="radio" id="user" name="role" value="User" className="hidden" />
+                  Sign up as User
+                </label>
+                <label htmlFor="trainer" className={` w-36 text-center rounded-full ${values.role === "Trainer" ? "bg-green" : ""}`}>
+                  <Field type="radio" id="trainer" name="role" value="Trainer" className="hidden" />
+                  Sign up as Trainer
+                </label>
+              </div>
               <div className="flex justify-center">
                 <button
                   type="submit"
@@ -103,7 +119,7 @@ const Register = () => {
                   Sign up  
                 </button>
               </div>
-            </form>
+            </Form>
           </div>
         );
       }}

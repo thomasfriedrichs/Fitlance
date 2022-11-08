@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import { setAuthToken } from "../common/SetAxiosHeaderToken";
 import BaseUrl from "./ApiRoutes";
 
@@ -23,13 +24,14 @@ const API_EXT = "Auth/";
 
   export const logout = (setToken) => {
     setToken(null);
-  }
+  };
 
-  export const register = (username, email, password, setToken) => {
+  export const register = (username, email, password, role, setToken) => {
     return axios.post(BaseUrl + API_EXT + "register", {
       username,
       email,
-      password
+      password,
+      role
     }).then(response => {
       if (response.data.accessToken) {
         setToken(JSON.stringify(response.data));
@@ -39,8 +41,8 @@ const API_EXT = "Auth/";
       return response.data;
     })
     .catch(console.error());
-  }
+  };
 
   export const getCurrentUser = () => {
-    return JSON.parse(localStorage.getItem('user'));;
-  }    
+    return JSON.parse(localStorage.getItem('user'));
+  };   

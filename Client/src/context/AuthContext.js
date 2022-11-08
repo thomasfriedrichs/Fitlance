@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 import { setAxiosHeaderToken } from "../services/SetAxiosHeaderToken";
-import { BaseUrl } from "../services/ApiRoutes";
 
 const AuthContext = React.createContext();
 
@@ -14,14 +14,13 @@ export const useAuth = () => {
 
 const AuthContextProvider = ({children}) => {
   const [ token, setToken ] = useState();
-  const API_EXTN = "Auth/";
+  const [ role, setRole ] = useState("");
   const navigate = useNavigate();
   const [ isFormVisible, setIsFormVisible ] = useState(true);
 
-
   const onLogin = (email, password) => {
     return axios
-      .post(BaseUrl + API_EXTN + "login", {
+      .post("api/Auth/login", {
         email,
         password
       })
@@ -31,6 +30,9 @@ const AuthContextProvider = ({children}) => {
           setAxiosHeaderToken(JSON.stringify(response.data));
           navigate("/home");
         }
+        const jwt = JSON.stringify(response.data);
+        const decoded = jwt_decode(jwt);
+        setRole(decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]);
         return response.data;
       })
       .catch(console.error());
@@ -40,17 +42,21 @@ const AuthContextProvider = ({children}) => {
     setToken(null);
   };
 
-  const onRegister = (username, email, password) => {
-    return axios.post(BaseUrl + API_EXTN + "register", {
+  const onRegister = (username, email, password, role) => {
+    return axios.post("api/Auth/register", {
       username,
       email,
-      password
+      password,
+      role
     }).then(response => {
       if (response.data.accessToken) {
         setToken(JSON.stringify(response.data));
         setAxiosHeaderToken(JSON.stringify(response.data));
         navigate("/home");
       }
+      const jwt = JSON.stringify(response.data)
+      const decoded = jwt_decode(jwt);
+      setRole(decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"])
       return response.data;
     })
     .catch(console.error());
@@ -62,7 +68,8 @@ const AuthContextProvider = ({children}) => {
     onLogout,
     onRegister,
     isFormVisible,
-    setIsFormVisible
+    setIsFormVisible,
+    role
   };
 
   return (
