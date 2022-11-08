@@ -4,7 +4,7 @@
 
 namespace Fitlance.Migrations
 {
-    public partial class IdentityMigration3 : Migration
+    public partial class Identity3 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -1,60 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Fitlance.Data;
-using Fitlance.Models;
 using Microsoft.AspNetCore.Authorization;
+using Fitlance.Entities;
 
 namespace Fitlance.Controllers;
 
 [ApiController]
 [Authorize]
 [Route("api/[controller]")]
-public class ClientsController : ControllerBase
+public class UsersController : ControllerBase
 {
     private readonly FitlanceContext _context;
 
-    public ClientsController(FitlanceContext context)
+    public UsersController(FitlanceContext context)
     {
         _context = context;
     }
 
-    // GET: api/Clients
+    // GET: api/Users
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Client>>> GetClients()
+    public async Task<ActionResult<IEnumerable<User>>> GetUsers()
     {
-        return await _context.Clients.ToListAsync();
+        return await _context.Users.ToListAsync();
     }
 
     // GET: api/Clients/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Client>> GetClient(int id)
+    public async Task<ActionResult<User>> GetUser(string id)
     {
-        var client = await _context.Clients.FindAsync(id);
+        var user = await _context.Users.FindAsync(id);
 
-        if (client == null)
+        if (user == null)
         {
             return NotFound();
         }
 
-        return client;
+        return user;
     }
 
     // PUT: api/Clients/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutClient(int id, Client client)
+    public async Task<IActionResult> PutUser(string id, User user)
     {
-        if (id != client.Id)
+        if (id != user.Id)
         {
             return BadRequest();
         }
 
-        _context.Entry(client).State = EntityState.Modified;
+        _context.Entry(user).State = EntityState.Modified;
 
         try
         {
@@ -62,7 +57,7 @@ public class ClientsController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!ClientExists(id))
+            if (!UserExists(id))
             {
                 return NotFound();
             }
@@ -78,32 +73,32 @@ public class ClientsController : ControllerBase
     // POST: api/Clients
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<ActionResult<Client>> PostClient(Client client)
+    public async Task<ActionResult<User>> PostUser(User user)
     {
-        _context.Clients.Add(client);
+        _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetClient), new { id = client.Id }, client);
+        return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, user);
     }
 
     // DELETE: api/Clients/5
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteClient(int id)
+    public async Task<IActionResult> DeleteUser(string id)
     {
-        var client = await _context.Clients.FindAsync(id);
-        if (client == null)
+        var user = await _context.Users.FindAsync(id);
+        if (user == null)
         {
             return NotFound();
         }
 
-        _context.Clients.Remove(client);
+        _context.Users.Remove(user);
         await _context.SaveChangesAsync();
 
         return NoContent();
     }
 
-    private bool ClientExists(int id)
+    private bool UserExists(string id)
     {
-        return _context.Clients.Any(e => e.Id == id);
+        return _context.Users.Any(e => e.Id == id);
     }
 }

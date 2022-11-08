@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Fitlance.Entities;
 using Fitlance.Services;
+using Fitlance.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -20,6 +20,8 @@ builder.Services.AddDbContext<FitlanceContext>(options =>
 
 //Identity
 builder.Services.AddIdentity<User, IdentityRole>()
+    .AddRoles<IdentityRole>()
+    .AddRoleManager<RoleManager<IdentityRole>>()
     .AddEntityFrameworkStores<FitlanceContext>()
     .AddDefaultTokenProviders();
 
@@ -27,6 +29,7 @@ builder.Services.AddIdentity<User, IdentityRole>()
 builder.Services.AddAuthentication(
         CertificateAuthenticationDefaults.AuthenticationScheme)
     .AddCertificate();
+
 builder.Services.AddAuthentication(options =>
 {
 
@@ -47,6 +50,15 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
         };
     });
+
+//Authorization Policies
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("TrainerRights", policy =>
+        policy.RequireRole(Role.Trainer));
+    options.AddPolicy("UserRights", policy =>
+        policy.RequireRole(Role.User));
+});
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
@@ -130,5 +142,12 @@ app.MapFallbackToFile("index.html"); ;
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    await SeedManager.Seed(services);
+}
 
 app.Run();

@@ -1,5 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using Fitlance.Dtos;
+﻿using Fitlance.Dtos;
 
 namespace Fitlance.Services;
 
