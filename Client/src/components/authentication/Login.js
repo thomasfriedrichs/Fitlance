@@ -2,10 +2,9 @@ import React from "react";
 import { Formik } from "formik";
 
 import { LogInSchema } from "../../validators/Validate";
-import { useAuth } from "../../context/AuthContext";
+import { login } from "../../services/AuthService";
 
 const Login = () => {
-  const { onLogin } = useAuth();
 
   const initialValues = {
     email: "",
@@ -13,15 +12,15 @@ const Login = () => {
   };
 
   const handleLogin = (values) => {
-    onLogin(values.email, values.password);
+    login(values.email, values.password);
   };
 
   const handleGuestUser = () => {
-    onLogin(process.env.REACT_APP_USER_EMAIL, process.env.REACT_APP_USER_PASSWORD)
+    login(process.env.REACT_APP_USER_EMAIL, process.env.REACT_APP_USER_PASSWORD)
   };
 
   const handleGuestTrainer = () => {
-    onLogin(process.env.REACT_APP_TRAINER_EMAIL, process.env.REACT_APP_TRAINER_PASSWORD)
+    login(process.env.REACT_APP_TRAINER_EMAIL, process.env.REACT_APP_TRAINER_PASSWORD)
   };
 
   return (
@@ -97,13 +96,19 @@ const Login = () => {
           );
         }}
       </Formik>
-      <div>
-        <div onClick={handleGuestUser}>
+      <div className="flex flex-row gap-4 justify-around">
+        <button 
+          onClick={handleGuestUser}
+          className="border rounded-full p-2 hover:bg-green transition duration-150"
+        >
           Login as guest user
-        </div>
-        <div onClick={handleGuestTrainer}>
+        </button>
+        <button 
+          onClick={handleGuestTrainer}
+          className="border rounded-full p-2 hover:bg-green transition duration-150"
+        >
           Login as guest trainer
-        </div>
+        </button>
       </div>
     </div>
   );

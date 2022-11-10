@@ -1,26 +1,27 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { HamburgerButton, StretchingOne } from "@icon-park/react";
+import { useCookieWatcher } from "@fcannizzaro/react-use-cookie-watcher";
 
-import { useAuth } from "../../context/AuthContext";
 import AuthWrapper from "../authentication/AuthWrapper";
+import { logout } from "../../services/AuthService";
 
 const Navigation = () => {
-  const { 
-    logout, 
-    token, 
-    setIsFormVisible 
-  } = useAuth();
+  const cookieExists = useCookieWatcher("X-Access-Token", {
+    checkEvery: 500
+  });
 
   const [ isNavOpen, setIsNavOpen ] = useState(false);
+  const [ isFormVisible, setIsFormVisible] = useState(false);
 
   const onLoginVisible = () => {
     setIsFormVisible(true)
+    console.log(isFormVisible)
   };
 
   return (
     <nav className="lg-white shadow-md bg-white fixed top-0 w-[100vw]">
-      <AuthWrapper/>
+      <AuthWrapper isFormVisible={isFormVisible} setIsFormVisible={setIsFormVisible}/>
       <div className="mx-auto px-4 min-h-[2.5rem]">
         <div className="flex justify-between">
           <div className="flex space-x-7">
@@ -71,17 +72,17 @@ const Navigation = () => {
                   <li className="border-b border-gray-400 my-8 uppercase">
                     <button 
                       type="button" 
-                      onClick={token ? logout : onLoginVisible}
-                      className={token ? 
-                        "button" : 
+                      onClick={cookieExists ? logout : onLoginVisible}
+                      className={cookieExists ? 
+                        "py-2 px-2 font-medium text-gray-500 rounded hover:bg-green hover:text-white transition duration-150" : 
                         "py-2 px-2 font-medium text-gray-500 rounded hover:bg-green hover:text-white transition duration-150"
                       }
                     >
-                      {token ? "Log out" : "Log in"}
+                      {cookieExists ? "Log out" : "Log in"}
                     </button>
                   </li>
                   <li className="border-b border-gray-400 my-8 uppercase">
-                    {token ? <></> : 
+                    {cookieExists ? <></> : 
                       <button
                         onClick={onLoginVisible}
                         className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green hover:text-white transition duration-150"
@@ -100,7 +101,7 @@ const Navigation = () => {
             </div>
           </div>
           <div className="hidden md:flex items-center space-x-3">
-            {token ? <></> : 
+            {cookieExists ? <></> : 
               <button 
                 onClick={onLoginVisible}
                 className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green hover:text-white transition duration-150"
@@ -110,13 +111,10 @@ const Navigation = () => {
             }
             <button 
               type="button"
-              onClick={token ? logout : onLoginVisible}
-              className={token ? 
-                "button" : 
-                "py-2 px-2 font-medium text-gray-500 rounded hover:bg-green hover:text-white transition duration-150"
-              }
+              onClick={cookieExists ? logout : onLoginVisible}
+              className="py-2 px-2 mx-4 font-medium text-gray-500 rounded hover:bg-green hover:text-white transition duration-150"
             >
-              {token ? "Log out" : "Log in"}
+              {cookieExists ? "Log out" : "Log in"}
             </button>
           </div>
         </div>

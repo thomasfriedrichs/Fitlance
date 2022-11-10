@@ -1,10 +1,12 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useCookieWatcher } from "@fcannizzaro/react-use-cookie-watcher";
 
 const ProtectedRoute = ({ children }) => {
-  const { token } = useAuth();
+  const cookieExists = useCookieWatcher("X-Access-Token", {
+    checkEvery: 500
+  });
 
-  if (!token) {
+  if (!cookieExists) {
     return <Navigate to="/home" replace />;
   };
 

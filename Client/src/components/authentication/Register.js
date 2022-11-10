@@ -2,11 +2,9 @@ import React from "react";
 import { Field, Formik, Form } from "formik";
 
 import { RegisterSchema } from "../../validators/Validate";
-import { useAuth } from "./../../context/AuthContext";
+import { register } from "../../services/AuthService";
 
 const Register = () => {
-  const { onRegister } = useAuth();
-
   const initialValues = {
     username:"",
     email: "",
@@ -14,9 +12,9 @@ const Register = () => {
     role: ""
   };
 
-  const handleRegistration = ( values) => {
+  const handleRegistration = (values) => {
     console.log(values);
-    onRegister(values.username, values.email, values.password, values.role);
+    register(values.username, values.email, values.password, values.role);
   };
 
   return (
