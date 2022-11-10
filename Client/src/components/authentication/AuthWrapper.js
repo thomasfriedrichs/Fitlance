@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { BigX } from "@icon-park/react";
 
-import { useAuth } from "../../context/AuthContext";
 import Login from "./Login";
 import Register from "./Register";
 
-const AuthWrapper = () => {
+const AuthWrapper = ({isFormVisible, setIsFormVisible}) => {
   const [ currentTab, setCurrentTab ] = useState(0);
-  const { isFormVisible , setIsFormVisible } = useAuth();
 
   const forms = [
     {component: <Login/>},

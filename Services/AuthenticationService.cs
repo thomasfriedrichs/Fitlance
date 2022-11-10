@@ -1,7 +1,6 @@
 ﻿using Fitlance.Dtos;
 using Fitlance.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -90,7 +89,7 @@ public class AuthenticationService : IAuthenticationService
     }
    
     var token = GetToken(authClaims);
-
+    
     return new JwtSecurityTokenHandler().WriteToken(token);
   }
 
@@ -108,7 +107,7 @@ public class AuthenticationService : IAuthenticationService
     return token;
   }
 
-  private string GetErrorsText(IEnumerable<IdentityError> errors)
+  private static string GetErrorsText(IEnumerable<IdentityError> errors)
   {
     return string.Join(", ", errors.Select(error => error.Description).ToArray());
   }
