@@ -25,7 +25,7 @@ public class UsersController : ControllerBase
         return await _context.Users.ToListAsync();
     }
 
-    // GET: api/Clients/5
+    // GET: api/User/5
     [HttpGet("{id}")]
     public async Task<ActionResult<User>> GetUser(string id)
     {
@@ -39,7 +39,7 @@ public class UsersController : ControllerBase
         return user;
     }
 
-    // PUT: api/Clients/5
+    // PUT: api/User/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
     public async Task<IActionResult> PutUser(string id, User user)
@@ -70,7 +70,7 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 
-    // POST: api/Clients
+    // POST: api/User
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
     public async Task<ActionResult<User>> PostUser(User user)
@@ -81,7 +81,7 @@ public class UsersController : ControllerBase
         return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, user);
     }
 
-    // DELETE: api/Clients/5
+    // DELETE: api/User/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(string id)
     {

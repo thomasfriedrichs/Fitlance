@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { HamburgerButton, StretchingOne } from "@icon-park/react";
 import { useCookieWatcher } from "@fcannizzaro/react-use-cookie-watcher";
+import Cookies from "js-cookie";
 
 import AuthWrapper from "../authentication/AuthWrapper";
 import { logout } from "../../services/AuthService";
@@ -10,6 +11,8 @@ const Navigation = () => {
   const cookieExists = useCookieWatcher("X-Access-Token", {
     checkEvery: 500
   });
+
+  const cookieValue = Cookies.get("Role")
 
   const [ isNavOpen, setIsNavOpen ] = useState(false);
   const [ isFormVisible, setIsFormVisible] = useState(false);
@@ -95,9 +98,28 @@ const Navigation = () => {
               </div>
             </section>
             <div className="hidden md:flex items-center py-4 px-2">
-              <div className="font-semibold text-gray-500 text-lg duration-150">
+              <div className="font-semibold text-gray-500 text-lg duration-150 px-2 border-r-2">
                 <NavLink to="/home" className="hover:text-green hover:border-b">Home</NavLink>
               </div>
+              {cookieExists ? 
+                <>
+                  <div className="font-semibold text-gray-500 text-lg duration-150 px-2 border-r-2">
+                    <NavLink to="/profile" className="hover:text-green hover:border-b">Profile</NavLink>
+                  </div>
+                  <div className="font-semibold text-gray-500 text-lg duration-150 px-2 border-r-2">
+                    <NavLink to="/appointments" className="hover:text-green hover:border-b">Appointments</NavLink>
+                  </div>
+                </>
+              :
+                <></>
+              }
+              {cookieValue === "User" ?
+                <div className="font-semibold text-gray-500 text-lg duration-150 px-2 border-r-2">
+                  <NavLink to="/findtrainers" className="hover:text-green hover:border-b">Find Trainers</NavLink>
+                </div>
+              :
+                <></>
+              }
             </div>
           </div>
           <div className="hidden md:flex items-center space-x-3">

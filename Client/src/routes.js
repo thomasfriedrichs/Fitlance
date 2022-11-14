@@ -3,10 +3,11 @@ import { Routes, Route } from "react-router-dom";
 
 import Home from "./components/home/Home";
 import NotFound from "./components/layout/NotFound";
-import AuthWrapper from "./components/authentication/AuthWrapper";
-import UserHome from "./components/user/UserHome";
-import ProtectedRoute from "./components/authentication/ProtectedRoute";
-import TrainerHome from "./components/trainer/TrainerHome";
+import ProtectedRoute from "./components/routeProtection/ProtectedRoute";
+import Profile from './components/profile/Profile';
+import Appointments from './components/appointments/Appointments';
+import ProtectedUserRoute from "./components/routeProtection/protectedUserRoute";
+import FindTrainers from "./components/findTrainers/FindTrainers";
 
 const Routing = () => {
   return (
@@ -21,24 +22,30 @@ const Routing = () => {
         element={<Home/>}
       />
       <Route
-        path="client"
+        path="profile"
         element={
           <ProtectedRoute>
-            <UserHome/>
+            <Profile/>
           </ProtectedRoute>
         }
       />
       <Route
-        path="trainer"
+        path="appointments"
         element={
           <ProtectedRoute>
-            <TrainerHome/>
+            <Appointments/>
           </ProtectedRoute>
         }
       />
       <Route
-        path="login"
-        element={<AuthWrapper/>}
+        path="findtrainers"
+        element={
+          <ProtectedRoute>
+            <ProtectedUserRoute>
+              <FindTrainers/>
+            </ProtectedUserRoute>
+          </ProtectedRoute>
+        }
       />
       <Route 
         to="*" 
