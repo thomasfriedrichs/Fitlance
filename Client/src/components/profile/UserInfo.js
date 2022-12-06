@@ -1,13 +1,7 @@
-import React, {useEffect} from "react";
+import React from "react";
 
 const UserInfo = ({data}) => {
   const { firstName, lastName, zipCode, city, bio } = data;
-
-  useEffect(() => {
-    for(const property in data) {
-      console.log(`${property}: ${data[property]}`)
-    };
-  },[data]);
 
   return (
     <section>
