@@ -1,11 +1,17 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import Routing from "./routes";
 import Layout from "./components/layout/Layout";
 
+const queryClient = new QueryClient();
+
 const App = () => {
   return (
-    <Layout>
-      <Routing/>
-    </Layout>
+    <QueryClientProvider client={queryClient}>
+      <Layout>
+        <Routing/>
+      </Layout>
+    </QueryClientProvider>
   );
 };
 

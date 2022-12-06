@@ -1,27 +1,35 @@
 using Microsoft.EntityFrameworkCore;
-using Fitlance.Data;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Fitlance.Data;
 using Fitlance.Services;
 using Fitlance.Entities;
+using IAuthenticationService = Fitlance.Services.IAuthenticationService;
+using AuthenticationService = Fitlance.Services.AuthenticationService;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
+
 // Add services to the container
-//Context
 builder.Services.AddDbContext<FitlanceContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("FitlanceDB")));
 
 //Identity
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>(opt =>
+{
+    opt.Password.RequireDigit = false;
+    opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._+@";
+})
     .AddRoles<IdentityRole>()
     .AddRoleManager<RoleManager<IdentityRole>>()
     .AddEntityFrameworkStores<FitlanceContext>()
     .AddDefaultTokenProviders();
+builder.Services.AddScoped<UserManager<User>>();
 
 //Authentication
 builder.Services.AddAuthentication(
@@ -122,7 +130,6 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    //app.UseHsts();
     app.UseDeveloperExceptionPage();
 }
 
@@ -136,7 +143,7 @@ app.UseCors("AllowReactDevClient");
 app.UseCors("AllowReactDevClient2");
 app.UseStaticFiles();
 app.UseRouting();
-app.MapFallbackToFile("index.html"); ;
+app.MapFallbackToFile("index.html");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

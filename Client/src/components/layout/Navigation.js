@@ -11,15 +11,13 @@ const Navigation = () => {
   const cookieExists = useCookieWatcher("X-Access-Token", {
     checkEvery: 500
   });
-
-  const cookieValue = Cookies.get("Role")
-
+  
+  const roleValue = Cookies.get("Role");
   const [ isNavOpen, setIsNavOpen ] = useState(false);
   const [ isFormVisible, setIsFormVisible] = useState(false);
 
   const onLoginVisible = () => {
-    setIsFormVisible(true)
-    console.log(isFormVisible)
+    setIsFormVisible(true);
   };
 
   return (
@@ -72,6 +70,40 @@ const Navigation = () => {
                       Home
                     </NavLink>
                   </li>
+                  {cookieExists ? 
+                    <>
+                      <li className="border-b border-gray-400 my-8">
+                        <NavLink 
+                          to="/profile" 
+                          className="font-semibold text-gray-500 text-lg hover:text-green duration-150"
+                        >
+                          Profile
+                        </NavLink>
+                      </li>
+                      <li className="border-b border-gray-400 my-8">
+                        <NavLink 
+                          to="/appointments" 
+                          className="font-semibold text-gray-500 text-lg hover:text-green duration-150"
+                        >
+                          Appointments
+                        </NavLink>
+                      </li>
+                    </>
+                  :
+                    <></>
+                  }
+                  {roleValue === "User" ?
+                    <li className="border-b border-gray-400 my-8">
+                      <NavLink 
+                        to="/findtrainers" 
+                        className="font-semibold text-gray-500 text-lg hover:text-green duration-150"
+                      >
+                        Find Trainers
+                      </NavLink>
+                    </li>
+                  :
+                    <></>
+                  }
                   <li className="border-b border-gray-400 my-8 uppercase">
                     <button 
                       type="button" 
@@ -104,18 +136,33 @@ const Navigation = () => {
               {cookieExists ? 
                 <>
                   <div className="font-semibold text-gray-500 text-lg duration-150 px-2 border-r-2">
-                    <NavLink to="/profile" className="hover:text-green hover:border-b">Profile</NavLink>
+                    <NavLink 
+                      to="/profile" 
+                      className="hover:text-green hover:border-b"
+                    >
+                      Profile
+                    </NavLink>
                   </div>
                   <div className="font-semibold text-gray-500 text-lg duration-150 px-2 border-r-2">
-                    <NavLink to="/appointments" className="hover:text-green hover:border-b">Appointments</NavLink>
+                    <NavLink 
+                      to="/appointments" 
+                      className="hover:text-green hover:border-b"
+                    >
+                      Appointments
+                    </NavLink>
                   </div>
                 </>
               :
                 <></>
               }
-              {cookieValue === "User" ?
+              {roleValue === "User" ?
                 <div className="font-semibold text-gray-500 text-lg duration-150 px-2 border-r-2">
-                  <NavLink to="/findtrainers" className="hover:text-green hover:border-b">Find Trainers</NavLink>
+                  <NavLink
+                    to="/findtrainers"
+                    className="hover:text-green hover:border-b"
+                  >
+                    Find Trainers
+                  </NavLink>
                 </div>
               :
                 <></>

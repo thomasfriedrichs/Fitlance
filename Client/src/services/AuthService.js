@@ -2,8 +2,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 
-import { setAxiosHeaderToken } from "../services/SetAxiosHeaderToken";
-
   export const login = (email, password) => {
     return axios
       .post("api/Auth/login", {
@@ -12,10 +10,11 @@ import { setAxiosHeaderToken } from "../services/SetAxiosHeaderToken";
       })
       .then(() => {
         const jwt = Cookies.get("X-Access-Token");
-        setAxiosHeaderToken(jwt);
         const decoded = jwt_decode(jwt);
-        Cookies.set("Email", decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"], { path: "/"});
+        Cookies.set("Id", decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"], { path: "/"});
         Cookies.set("Role", decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"], { path: "/"});
+        Cookies.set("UserName", decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"], { path: "/"});
+        Cookies.set("CStamp", decoded["cStamp"], { path: "/"});
         window.location.href = "/";
       })
       .catch(console.error());
@@ -25,7 +24,6 @@ import { setAxiosHeaderToken } from "../services/SetAxiosHeaderToken";
     Cookies.remove("X-Access-Token");
     Cookies.remove("Role");
     Cookies.remove("Email");
-
   };
 
   export const register = (username, email, password, role) => {
@@ -36,11 +34,12 @@ import { setAxiosHeaderToken } from "../services/SetAxiosHeaderToken";
       role
     }).then(() => {
       const jwt = Cookies.get("X-Access-Token");
-        setAxiosHeaderToken(jwt);
-        const decoded = jwt_decode(jwt);
-        Cookies.set("Email", decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"], { path: "/"});
-        Cookies.set("Role", decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"], { path: "/"});
-        window.location.href = "/";
+      const decoded = jwt_decode(jwt);
+      Cookies.set("Id", decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"], { path: "/"});
+      Cookies.set("Role", decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"], { path: "/"});
+      Cookies.set("UserName", decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/name"], { path: "/"});
+      Cookies.set("CStamp", decoded["cStamp"], { path: "/"});
+      window.location.href = "/";
     })
     .catch(console.error());
   };
