@@ -76,7 +76,7 @@ public class AuthenticationService : IAuthenticationService
 
     var authClaims = new List<Claim>
         {
-            new (ClaimTypes.Name, user.UserName),
+            new (ClaimTypes.Name, user.NormalizedUserName),
             new(ClaimTypes.Email, user.Email),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
@@ -87,8 +87,16 @@ public class AuthenticationService : IAuthenticationService
     {
        authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
     }
-   
-    var token = GetToken(authClaims);
+        
+        var userId = user.Id;
+
+        authClaims.Add(new Claim(ClaimTypes.Sid, userId));
+
+        var cStamp = user.ConcurrencyStamp;
+
+        authClaims.Add(new Claim("cStamp", cStamp));
+
+        var token = GetToken(authClaims);
     
     return new JwtSecurityTokenHandler().WriteToken(token);
   }

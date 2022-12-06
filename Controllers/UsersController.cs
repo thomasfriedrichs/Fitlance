@@ -42,17 +42,32 @@ public class UsersController : ControllerBase
     // PUT: api/User/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutUser(string id, User user)
+    public async Task<IActionResult> PutUser(string id, [FromBody] User user)
     {
-        if (id != user.Id)
-        {
-            return BadRequest();
-        }
+        var account = _context.Users.Find(id);
 
-        _context.Entry(user).State = EntityState.Modified;
-
+        Console.WriteLine(account);
+        
         try
         {
+            var entity = _context.Users.Single(e => e.Id == id);
+
+            Console.WriteLine(entity);
+
+
+            if (entity is null)
+            {
+                return BadRequest("User not Found");
+            }
+
+            entity.FirstName = user.FirstName;
+            entity.LastName = user.LastName;
+            entity.City = user.City;
+            entity.ZipCode = user.ZipCode;
+            entity.Bio = user.Bio;
+
+            _context.Entry(entity).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
@@ -66,19 +81,9 @@ public class UsersController : ControllerBase
                 throw;
             }
         }
+        
 
-        return NoContent();
-    }
-
-    // POST: api/User
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPost]
-    public async Task<ActionResult<User>> PostUser(User user)
-    {
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, user);
+        return Content("Success");
     }
 
     // DELETE: api/User/5
