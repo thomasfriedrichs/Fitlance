@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Fitlance.Entities;
 
@@ -9,10 +8,11 @@ public class Appointment
     [Column("AppointmentId")]
     public int Id { get; set; }
     [ForeignKey("UserId")]
-    public string? UserId { get; set; }
+    public string? ClientId { get; set; }
+    [ForeignKey("UserId")]
+    public string? TrainerId { get; set; }
     public string? Adress { get; set; }
-    public DateTime CreateTime { get; set; }
-    public DateTime AppointmentDate { get; set; }
+    public string? CreateTime { get; set; }
+    public string? AppointmentDate { get; set; }
     public bool IsActive { get; set; }
-
 }

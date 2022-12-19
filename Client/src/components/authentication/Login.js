@@ -5,7 +5,6 @@ import { LogInSchema } from "../../validators/Validate";
 import { login } from "../../services/AuthService";
 
 const Login = () => {
-
   const initialValues = {
     email: "",
     password: ""
@@ -41,7 +40,6 @@ const Login = () => {
             isValid,
             dirty
           } = formik;
-
           return (
             <div className="flex flex-col gap-y-4">
               <h1 className="text-3xl text-center">Log in to continue</h1>

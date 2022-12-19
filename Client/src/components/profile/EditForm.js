@@ -7,6 +7,16 @@ import { ProfileSchema } from "../../validators/Validate";
 import { putProfile } from "../../services/ProfileService";
 
 const EditForm = ({ setNeedsEdit, data }) => {
+  const mutation = useMutation({
+    mutationFn: async values => {
+      await putProfile(values)
+      backToProfile();
+    },
+    onError: (error) => {
+      console.log("query error", error);
+    }
+  });
+
   const userName = Cookies.get("UserName");
   const { firstName, lastName, city, zipCode, bio } = data;
 
@@ -18,16 +28,6 @@ const EditForm = ({ setNeedsEdit, data }) => {
     zipcode: zipCode === null ? "" : zipCode,
     bio: bio === null ? "" : bio
   };
-  
-  const mutation = useMutation({
-    mutationFn: async values => {
-      await putProfile(values)
-      backToProfile();
-    },
-    onError: (error) => {
-      console.log("query error", error);
-    }
-  });
 
   const backToProfile = () => {
     setNeedsEdit(false);
@@ -55,8 +55,8 @@ const EditForm = ({ setNeedsEdit, data }) => {
           <div className="border w-[100%] h-32 md:w-[20%] my-4">
             <p>profile img</p>
           </div>
-          <Form  
-            className="grid grid-cols-12 grid-rows-min gap-4 my-4 p-2 md:w-[80%] h-[100%]" 
+          <Form
+            className="grid grid-cols-12 grid-rows-min gap-4 my-4 p-2 md:w-[80%] h-[100%]"
             onSubmit={handleSubmit}
           >
             <input
@@ -88,7 +88,7 @@ const EditForm = ({ setNeedsEdit, data }) => {
             <input
               type="text"
               name="city"
-              placeholder={city === null ? "First name" : city}
+              placeholder={city === null ? "City" : city}
               value={values.city}
               onChange={handleChange}
               className={`border w-full rounded-lg text-center p-1 col-span-12 md:col-span-6

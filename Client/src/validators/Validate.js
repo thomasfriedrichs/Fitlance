@@ -22,4 +22,9 @@ export const ProfileSchema = Yup.object().shape({
   city: Yup.string().required("City required"),
   zipcode: Yup.number().required("Zipcode required"),
   bio: Yup.string().required("Bio required")
-})
+});
+
+export const AppointmentSchema = Yup.object().shape({
+  adrress: Yup.string().required("Location required"),
+  appointmentDate: Yup.string().matches(/(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d/, "Must format date MM/DD/YYYY")
+});

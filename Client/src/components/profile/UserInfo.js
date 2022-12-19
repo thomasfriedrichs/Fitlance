@@ -11,10 +11,9 @@ const UserInfo = ({data}) => {
         </div>
         <div className="basis-3/4 h-full text-left">
           <div className="py-6 px-12 text-2xl">
-            {
-              firstName === null || lastName === null ?
+            {firstName === null || lastName === null ?
               <p className="text-red-400">Please update Name</p>
-              : 
+              :
               <div>
                 <p>{firstName}</p>
                 <p>{lastName}</p>
@@ -22,8 +21,7 @@ const UserInfo = ({data}) => {
             }
           </div>
           <div className="py-6 px-12 text-2xl">
-            {
-              city === null ?
+            {city === null ?
               <p className="text-red-400">Please update City</p>
               :
               <div>
@@ -32,8 +30,7 @@ const UserInfo = ({data}) => {
             }
           </div>
           <div className="py-6 px-12 text-2xl">
-            {
-              zipCode === null ?
+            {zipCode === null ?
               <p className="text-red-400">Please update Zipcode</p>
               :
               <div>
@@ -42,8 +39,7 @@ const UserInfo = ({data}) => {
             }
           </div>
           <div className="py-6 px-12 text-2xl">
-            {
-              bio === null ?
+            {bio === null ?
               <p className="text-red-400">Please update Bio</p>
               :
               <div>
