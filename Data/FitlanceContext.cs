@@ -31,7 +31,7 @@ public class FitlanceContext : IdentityDbContext<User>
         modelBuilder.HasDefaultSchema("Fitlance");
             modelBuilder.Entity<User>(mb =>
             {
-                mb.HasMany<Appointment>().WithOne().HasForeignKey(a => a.UserId).IsRequired();
+                mb.HasMany<Appointment>().WithOne().HasForeignKey(a => a.ClientId).IsRequired();
                 mb.ToTable("AspNetUsers");
             });
 

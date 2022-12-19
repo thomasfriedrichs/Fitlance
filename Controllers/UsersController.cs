@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Fitlance.Data;
 using Microsoft.AspNetCore.Authorization;
 using Fitlance.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Fitlance.Controllers;
 
@@ -12,17 +13,29 @@ namespace Fitlance.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly FitlanceContext _context;
+    private readonly UserManager<User> _userManager;
 
-    public UsersController(FitlanceContext context)
+    public UsersController(FitlanceContext context, UserManager<User> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     // GET: api/Users
     [HttpGet]
     public async Task<ActionResult<IEnumerable<User>>> GetUsers()
     {
-        return await _context.Users.ToListAsync();
+       return await _context.Users.ToListAsync();
+    }
+
+    // GET: api/Users/FindTrainers
+    [HttpGet]
+    [Route("FindTrainers")]
+    public async Task<ActionResult<IEnumerable<User>>> FindTrainers()
+    {
+        var trainers = await _userManager.GetUsersInRoleAsync("Trainer");
+
+        return trainers.ToList();
     }
 
     // GET: api/User/5

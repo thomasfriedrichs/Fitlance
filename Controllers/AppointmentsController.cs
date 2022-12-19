@@ -27,16 +27,27 @@ public class AppointmentsController : ControllerBase
 
     // GET: api/Appointments/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Appointment>> GetAppointment(int id)
+    public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointment(string id)
     {
-        var appointment = await _context.Appointments.FindAsync(id);
+        var allAppointments = await _context.Appointments.ToListAsync();
 
-        if (appointment == null)
+        List<Appointment> appointments = new();
+
+        foreach (var appointment in allAppointments)
+        {
+            if(appointment.ClientId == id)
+            {
+                appointments.Add(appointment);
+                Console.WriteLine(appointments);
+            }
+        }
+
+        if (appointments == null)
         {
             return NotFound();
         }
 
-        return appointment;
+        return appointments;
     }
 
 
@@ -77,6 +88,7 @@ public class AppointmentsController : ControllerBase
     public async Task<ActionResult<Appointment>> PostAppointment(Appointment appointment)
     {
         _context.Appointments.Add(appointment);
+
         await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetAppointment), new { id = appointment.Id }, appointment);
