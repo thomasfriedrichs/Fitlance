@@ -3,26 +3,36 @@ import { Form, Formik } from "formik";
 import Cookies  from "js-cookie";
 
 import { AppointmentSchema } from "../../validators/Validate";
-import { postAppointment } from "../../services/AppointmentService";
 
-const CreateAppointment = (trainerId) => {
+const AppointmentForm = props => {
   const userId = Cookies.get("Id");
   const currentDate = new Date().toLocaleDateString();
-  
+  const { toggleView, query, reqType, trainerId, address, appointmentDate, id } = props;
+
   const initialValues = {
     clientId: userId,
-    trainerId: trainerId.trainerId,
-    adrress: "",
+    trainerId: trainerId,
+    address: address === null ? "" : address,
     createTime: currentDate,
-    appointmentDate: "",
+    appointmentDate: appointmentDate === null ? "" : appointmentDate,
     isActive: true
+  };
+
+  const onPut = (values) => {
+    query(id, values);
+    toggleView();
+  };
+
+  const onPost = (values) => {
+    query(values)
+    toggleView();
   };
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={AppointmentSchema}
-      onSubmit={postAppointment}
+      onSubmit={reqType === "put" ? onPut : onPost}
       enableReinitialize={true}
     >
       {(formik) => {
@@ -41,16 +51,16 @@ const CreateAppointment = (trainerId) => {
             className="flex flex-col justify-center">
             <input
               type="text"
-              name="adrress"
-              id="adrress"
+              name="address"
+              id="address"
               placeholder="Address/Location"
-              value={values.adrress}
+              value={values.address}
               onChange={handleChange}
               className={`border w-[95%] rounded-lg text-center p-1 m-2
-              ${errors.adrress && touched.adrress ? "border-red-500" : "border-lime-500"}
+              ${errors.address && touched.address ? "border-red-500" : "border-lime-500"}
             `}/>
-            {errors.adrress && touched.adrress && (
-            <span className="text-red-500">{errors.adrress}</span>
+            {errors.address && touched.address && (
+            <span className="text-red-500">{errors.address}</span>
             )}
             <input
               type="text"
@@ -69,7 +79,7 @@ const CreateAppointment = (trainerId) => {
               <button
                 disabled={!(dirty && isValid)}
                 type="submit"
-                className={`my-4 w-1/4 border rounded-full ${!(dirty && isValid) ? "" : "bg-green"}`}
+                className={`my-4 w-1/2 md:w-1/4 border rounded-full ${!(dirty && isValid) ? "" : "bg-green"}`}
               >
                 Make Appointment
               </button>
@@ -81,4 +91,4 @@ const CreateAppointment = (trainerId) => {
   );
 };
 
-export default CreateAppointment;
+export default AppointmentForm;
