@@ -5,7 +5,6 @@ import Home from "./components/home/Home";
 import NotFound from "./components/layout/NotFound";
 import ProtectedRoute from "./components/routeProtection/ProtectedRoute";
 import Profile from './components/profile/Profile';
-import Appointments from './components/appointments/Appointments';
 import ProtectedUserRoute from "./components/routeProtection/protectedUserRoute";
 import FindTrainers from "./components/findTrainers/FindTrainers";
 
@@ -26,14 +25,6 @@ const Routing = () => {
         element={
           <ProtectedRoute>
             <Profile/>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="appointments"
-        element={
-          <ProtectedRoute>
-            <Appointments/>
           </ProtectedRoute>
         }
       />

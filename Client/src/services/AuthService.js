@@ -13,8 +13,6 @@ import jwt_decode from "jwt-decode";
         const decoded = jwt_decode(jwt);
         Cookies.set("Id", decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"], { path: "/"});
         Cookies.set("Role", decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"], { path: "/"});
-        Cookies.set("UserName", decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"], { path: "/"});
-        Cookies.set("CStamp", decoded["cStamp"], { path: "/"});
         window.location.href = "/";
       })
       .catch(console.error());
@@ -24,6 +22,7 @@ import jwt_decode from "jwt-decode";
     Cookies.remove("X-Access-Token");
     Cookies.remove("Role");
     Cookies.remove("Email");
+    Cookies.remove("Id");
   };
 
   export const register = (username, email, password, role) => {
@@ -37,8 +36,6 @@ import jwt_decode from "jwt-decode";
       const decoded = jwt_decode(jwt);
       Cookies.set("Id", decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"], { path: "/"});
       Cookies.set("Role", decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"], { path: "/"});
-      Cookies.set("UserName", decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/name"], { path: "/"});
-      Cookies.set("CStamp", decoded["cStamp"], { path: "/"});
       window.location.href = "/";
     })
     .catch(console.error());

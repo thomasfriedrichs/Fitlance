@@ -11,7 +11,7 @@ public class Appointment
     public string? ClientId { get; set; }
     [ForeignKey("UserId")]
     public string? TrainerId { get; set; }
-    public string? Adress { get; set; }
+    public string? Address { get; set; }
     public string? CreateTime { get; set; }
     public string? AppointmentDate { get; set; }
     public bool IsActive { get; set; }

@@ -134,8 +134,10 @@ const EditForm = ({ setNeedsEdit, data }) => {
               >
                 Update
               </button>
-              <button onClick={backToProfile}>
-                back to profile
+              <button 
+              className="p-2"
+                onClick={backToProfile}>
+                Back to profile
               </button>
             </div>
           </Form>
