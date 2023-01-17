@@ -1,6 +1,5 @@
-﻿using Fitlance.Entities;
+﻿using Fitlance.Constants;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Fitlance.Data;
 
@@ -15,8 +14,8 @@ public static class SeedManager
     {
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-        await roleManager.CreateAsync(new IdentityRole(Role.User));
-        await roleManager.CreateAsync(new IdentityRole(Role.Trainer));
-    }
+        await roleManager.CreateAsync(new IdentityRole(RoleConstants.User));
 
+        await roleManager.CreateAsync(new IdentityRole(RoleConstants.Trainer));
+    }
 }

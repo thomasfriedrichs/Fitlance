@@ -13,6 +13,7 @@ namespace Fitlance.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly FitlanceContext _context;
+
     private readonly UserManager<User> _userManager;
 
     public UsersController(FitlanceContext context, UserManager<User> userManager)
@@ -104,12 +105,14 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> DeleteUser(string id)
     {
         var user = await _context.Users.FindAsync(id);
+
         if (user == null)
         {
             return NotFound();
         }
 
         _context.Users.Remove(user);
+
         await _context.SaveChangesAsync();
 
         return NoContent();

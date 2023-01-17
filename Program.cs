@@ -3,12 +3,11 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.Certificate;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Fitlance.Data;
-using Fitlance.Services;
 using Fitlance.Entities;
+using Fitlance.Constants;
 using IAuthenticationService = Fitlance.Services.IAuthenticationService;
 using AuthenticationService = Fitlance.Services.AuthenticationService;
 
@@ -61,9 +60,9 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("TrainerRights", policy =>
-        policy.RequireRole(Role.Trainer));
+        policy.RequireRole(RoleConstants.Trainer));
     options.AddPolicy("UserRights", policy =>
-        policy.RequireRole(Role.User));
+        policy.RequireRole(RoleConstants.User));
 });
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();

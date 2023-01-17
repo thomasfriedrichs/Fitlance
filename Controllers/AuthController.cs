@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Fitlance.Services;
 using Fitlance.Dtos;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Fitlance.Controllers;
 
@@ -39,6 +39,8 @@ public class AuthController : ControllerBase
     {
         var response = await _authenticationService.Register(request);
 
-        return Ok(response);
+        Response.Cookies.Append("X-Access-Token", response);
+
+        return Ok();
     }
 }

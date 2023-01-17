@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Fitlance.Data;
 using Microsoft.AspNetCore.Authorization;
+using Fitlance.Data;
 using Fitlance.Entities;
 
 namespace Fitlance.Controllers;
@@ -38,7 +38,6 @@ public class AppointmentsController : ControllerBase
             if(appointment.ClientId == id)
             {
                 appointments.Add(appointment);
-                Console.WriteLine(appointments);
             }
         }
 
@@ -49,7 +48,6 @@ public class AppointmentsController : ControllerBase
 
         return appointments;
     }
-
 
     // PUT: api/Appointments/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

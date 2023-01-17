@@ -1,7 +1,8 @@
-﻿namespace Fitlance.Entities;
+﻿namespace Fitlance.Constants;
 
-public static class Role
+public class RoleConstants
 {
     public const string User = "User";
+
     public const string Trainer = "Trainer";
 }
