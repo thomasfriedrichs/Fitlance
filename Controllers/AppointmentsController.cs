@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Fitlance.Data;
 using Fitlance.Entities;
-using System.Diagnostics;
 
 namespace Fitlance.Controllers;
 [ApiController]
