@@ -22,7 +22,7 @@ import jwt_decode from "jwt-decode";
     Cookies.remove("X-Access-Token");
     Cookies.remove("Role");
     Cookies.remove("Email");
-    Cookies.remove("Id")
+    Cookies.remove("Id");
   };
 
   export const register = (username, email, password, role) => {

@@ -29,6 +29,6 @@ export const ProfileSchema = Yup.object().shape({
 });
 
 export const AppointmentSchema = Yup.object().shape({
-  adrress: Yup.string().required("Location required"),
+  address: Yup.string().required("Location required"),
   appointmentDate: Yup.string().matches(/(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d/, "Must format date MM/DD/YYYY")
 });

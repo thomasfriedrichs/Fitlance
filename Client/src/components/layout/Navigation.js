@@ -80,14 +80,6 @@ const Navigation = () => {
                           Profile
                         </NavLink>
                       </li>
-                      <li className="border-b border-gray-400 my-8">
-                        <NavLink 
-                          to="/appointments" 
-                          className="font-semibold text-gray-500 text-lg hover:text-green duration-150"
-                        >
-                          Appointments
-                        </NavLink>
-                      </li>
                     </>
                   :
                     <></>
@@ -141,14 +133,6 @@ const Navigation = () => {
                       className="hover:text-green hover:border-b"
                     >
                       Profile
-                    </NavLink>
-                  </div>
-                  <div className="font-semibold text-gray-500 text-lg duration-150 px-2 border-r-2">
-                    <NavLink 
-                      to="/appointments" 
-                      className="hover:text-green hover:border-b"
-                    >
-                      Appointments
                     </NavLink>
                   </div>
                 </>

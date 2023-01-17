@@ -11,7 +11,7 @@ public class Appointment
 
     public string? TrainerId { get; set; }
 
-    public string? Adress { get; set; }
+    public string? Address { get; set; }
 
     public string? CreateTime { get; set; }
 

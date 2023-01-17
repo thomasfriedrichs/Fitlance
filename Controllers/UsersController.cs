@@ -59,15 +59,10 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> PutUser(string id, [FromBody] User user)
     {
         var account = _context.Users.Find(id);
-
-        Console.WriteLine(account);
         
         try
         {
             var entity = _context.Users.Single(e => e.Id == id);
-
-            Console.WriteLine(entity);
-
 
             if (entity is null)
             {

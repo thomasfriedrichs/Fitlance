@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Fitlance.Data;
 using Fitlance.Entities;
+using System.Diagnostics;
 
 namespace Fitlance.Controllers;
-
 [ApiController]
 [Authorize]
 [Route("api/[controller]")]
@@ -18,16 +18,15 @@ public class AppointmentsController : ControllerBase
         _context = context;
     }
 
-    // GET: api/Appointments
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointments()
     {
         return await _context.Appointments.ToListAsync();
     }
 
-    // GET: api/Appointments/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<IEnumerable<Appointment>>> GetAppointment(string id)
+    [HttpGet]
+    [Route("GetUserAppointments/{id}")]
+    public async Task<ActionResult<IEnumerable<Appointment>>> GetUserAppointments(string id)
     {
         var allAppointments = await _context.Appointments.ToListAsync();
 
@@ -49,27 +48,70 @@ public class AppointmentsController : ControllerBase
         return appointments;
     }
 
-    // PUT: api/Appointments/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutAppointment(int id, Appointment appointment)
+
+    [HttpGet]
+    [Route("GetTrainerAppointments/{id}")]
+    public async Task<ActionResult<IEnumerable<Appointment>>> GetTrainerAppointments(string id)
     {
-        if (id != appointment.Id)
+        var allAppointments = await _context.Appointments.ToListAsync();
+
+        List<Appointment> appointments = new();
+
+        foreach (var appointment in allAppointments)
         {
-            return BadRequest();
+            if (appointment.TrainerId == id)
+            {
+                appointments.Add(appointment);
+            }
         }
 
-        _context.Entry(appointment).State = EntityState.Modified;
-
-        try
+        if (appointments == null)
         {
+            return NotFound();
+        }
+
+        return appointments;
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Appointment>> GetAppointment(int id)
+    {
+        var appointment = await _context.Appointments.FindAsync(id);
+
+        if(appointment == null)
+        {
+            return NotFound();
+        }
+
+        return appointment;
+    }
+
+
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutAppointment(int id, [FromBody] Appointment appointment)
+    {
+        try
+        {   
+            var existingAppointment = await _context.Appointments.FindAsync(id);
+
+            if(existingAppointment == null)
+            {
+                return BadRequest("Appointment Not Found");
+            }
+
+            existingAppointment.AppointmentDate = appointment.AppointmentDate;
+            existingAppointment.Address = appointment.Address;
+
+            _context.Entry(existingAppointment).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
         {
             if (!AppointmentExists(id))
             {
-                return NotFound();
+                return NotFound("Not Found");
             }
             else
             {
@@ -80,7 +122,6 @@ public class AppointmentsController : ControllerBase
         return NoContent();
     }
 
-    // POST: api/Appointments
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
     public async Task<ActionResult<Appointment>> PostAppointment(Appointment appointment)
@@ -92,7 +133,6 @@ public class AppointmentsController : ControllerBase
         return CreatedAtAction(nameof(GetAppointment), new { id = appointment.Id }, appointment);
     }
 
-    // DELETE: api/Appointments/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAppointment(int id)
     {
