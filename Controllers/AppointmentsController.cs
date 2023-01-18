@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Fitlance.Data;
 using Fitlance.Entities;
+using System.Collections;
 
 namespace Fitlance.Controllers;
 [ApiController]
@@ -25,19 +26,9 @@ public class AppointmentsController : ControllerBase
 
     [HttpGet]
     [Route("GetUserAppointments/{id}")]
-    public async Task<ActionResult<IEnumerable<Appointment>>> GetUserAppointments(string id)
+    public async Task<ActionResult<IEnumerable<Appointment>>> GetUserAppointments(string? id)
     {
-        var allAppointments = await _context.Appointments.ToListAsync();
-
-        List<Appointment> appointments = new();
-
-        foreach (var appointment in allAppointments)
-        {
-            if(appointment.ClientId == id)
-            {
-                appointments.Add(appointment);
-            }
-        }
+        var appointments = await _context.Appointments.Where(a => a.ClientId == id).ToListAsync();
 
         if (appointments == null)
         {
@@ -47,22 +38,11 @@ public class AppointmentsController : ControllerBase
         return appointments;
     }
 
-
     [HttpGet]
     [Route("GetTrainerAppointments/{id}")]
     public async Task<ActionResult<IEnumerable<Appointment>>> GetTrainerAppointments(string id)
     {
-        var allAppointments = await _context.Appointments.ToListAsync();
-
-        List<Appointment> appointments = new();
-
-        foreach (var appointment in allAppointments)
-        {
-            if (appointment.TrainerId == id)
-            {
-                appointments.Add(appointment);
-            }
-        }
+        var appointments = await _context.Appointments.Where(a => a.TrainerId == id).ToListAsync();
 
         if (appointments == null)
         {
