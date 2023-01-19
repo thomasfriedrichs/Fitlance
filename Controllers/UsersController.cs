@@ -24,6 +24,7 @@ public class UsersController : ControllerBase
 
     // GET: api/Users
     [HttpGet]
+    [ProducesResponseType(typeof(Array), 200)]
     public async Task<ActionResult<IEnumerable<User>>> GetUsers()
     {
        return await _context.Users.ToListAsync();
@@ -32,6 +33,7 @@ public class UsersController : ControllerBase
     // GET: api/Users/FindTrainers
     [HttpGet]
     [Route("FindTrainers")]
+    [ProducesResponseType(typeof(Array), 200)]
     public async Task<ActionResult<IEnumerable<User>>> FindTrainers()
     {
         var trainers = await _userManager.GetUsersInRoleAsync("Trainer");
@@ -41,6 +43,8 @@ public class UsersController : ControllerBase
 
     // GET: api/User/5
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(object), 200)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<User>> GetUser(string id)
     {
         var user = await _context.Users.FindAsync(id);
@@ -50,53 +54,58 @@ public class UsersController : ControllerBase
             return NotFound();
         }
 
-        return user;
+        return Ok(user);
     }
 
     // PUT: api/User/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
+    [ProducesResponseType(typeof(object), 200)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> PutUser(string id, [FromBody] User user)
     {
         var account = _context.Users.Find(id);
         
         try
         {
-            var entity = _context.Users.Single(e => e.Id == id);
+            var DbUser = _context.Users.Single(e => e.Id == id);
 
-            if (entity is null)
+            if (DbUser is null)
             {
-                return BadRequest("User not Found");
+                return NotFound("User not Found");
             }
 
-            entity.FirstName = user.FirstName;
-            entity.LastName = user.LastName;
-            entity.City = user.City;
-            entity.ZipCode = user.ZipCode;
-            entity.Bio = user.Bio;
+            DbUser.FirstName = user.FirstName;
+            DbUser.LastName = user.LastName;
+            DbUser.City = user.City;
+            DbUser.ZipCode = user.ZipCode;
+            DbUser.Bio = user.Bio;
 
-            _context.Entry(entity).State = EntityState.Modified;
+            _context.Entry(DbUser).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
+
+            return Ok(DbUser);
         }
         catch (DbUpdateConcurrencyException)
         {
             if (!UserExists(id))
             {
-                return NotFound();
+                return BadRequest();
             }
             else
             {
                 throw;
             }
         }
-        
-
-        return Content("Success");
     }
 
     // DELETE: api/User/5
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteUser(string id)
     {
         var user = await _context.Users.FindAsync(id);
