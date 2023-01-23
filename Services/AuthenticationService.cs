@@ -51,10 +51,10 @@ public class AuthenticationService : IAuthenticationService
 
         if (user is null)
         {
-            user = await _userManager.FindByEmailAsync(request.Email);
+            throw new ArgumentException($"User with email: {request.Email} Not Found");
         }
 
-        if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
+        if (!await _userManager.CheckPasswordAsync(user, request.Password))
         {
             throw new ArgumentException($"Unable to authenticate user {request.Email}");
         }
