@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Fitlance.Dtos;
-using Fitlance.Entities;
-using Fitlance.Constants;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+
+using Fitlance.Dtos;
+using Fitlance.Entities;
+using Fitlance.Constants;
 
 namespace Fitlance.Services;
 
@@ -22,17 +23,7 @@ public class AuthenticationService : IAuthenticationService
     
     public async Task<string> Register(RegisterRequest request)
     {
-        var userByUsername = await _userManager.FindByNameAsync(request.Username);
-        var userByEmail = await _userManager.FindByEmailAsync(request.Email);
-            
-        if (userByEmail is not null)
-        {
-            throw new ArgumentException($"User with {request.Email} already exists.");
-        }
-        if (userByUsername is not null)
-        {
-            throw new ArgumentException($"User with {request.Username} already exists.");
-        }
+        await CheckIfUserExists(request, _userManager);
 
         User user = new()
         {
@@ -43,14 +34,7 @@ public class AuthenticationService : IAuthenticationService
 
         var result = await _userManager.CreateAsync(user, request.Password);
 
-        if (request.Role == "User")
-        {
-            await _userManager.AddToRoleAsync(user, RoleConstants.User);
-        }
-        if (request.Role == "Trainer")
-        {
-            await _userManager.AddToRoleAsync(user, RoleConstants.Trainer);
-        }
+        await AddToRole(request.Role, user, _userManager);
 
         if (!result.Succeeded)
         {
@@ -89,17 +73,52 @@ public class AuthenticationService : IAuthenticationService
             authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
         }
         
-        var userId = user.Id;
+        authClaims.Add(new Claim(ClaimTypes.Sid, user.Id));
 
-        authClaims.Add(new Claim(ClaimTypes.Sid, userId));
-
-        var cStamp = user.ConcurrencyStamp;
-
-        authClaims.Add(new Claim("cStamp", cStamp));
+        authClaims.Add(new Claim("cStamp", user.ConcurrencyStamp));
 
         var token = GetToken(authClaims);
     
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    private static async Task<IdentityResult> CheckIfUserExists(RegisterRequest request, UserManager<User> userManager)
+    {
+        var userByUsername = await userManager.FindByNameAsync(request.Username);
+        var userByEmail = await userManager.FindByEmailAsync(request.Email);
+
+        if (userByEmail is not null)
+        {
+            throw new ArgumentException($"User with {request.Email} already exists.");
+        }
+        else if (userByUsername is not null)
+        {
+            throw new ArgumentException($"User with {request.Username} already exists.");
+        } 
+        else
+        {
+            return IdentityResult.Success;
+        }
+    }
+
+    private static async Task<IdentityResult> AddToRole(string role, User user, UserManager<User> userManager)
+    {
+        if (role == "User")
+        {
+            var result = await userManager.AddToRoleAsync(user, RoleConstants.User);
+
+            return result;
+        }
+        else if (role == "Trainer")
+        {
+            var result = await userManager.AddToRoleAsync(user, RoleConstants.Trainer);
+
+            return result;
+        }
+        else
+        {
+            throw new ArgumentException($"Unable to register user, role required");
+        }
     }
 
     private JwtSecurityToken GetToken(IEnumerable<Claim> authClaims)
