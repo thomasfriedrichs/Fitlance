@@ -79,7 +79,7 @@ const AppointmentForm = props => {
               <button
                 disabled={!(dirty && isValid)}
                 type="submit"
-                className={`my-4 w-1/2 md:w-1/4 border rounded-full ${!(dirty && isValid) ? "" : "bg-green"}`}
+                className={`my-4 w-1/2 md:w-full border rounded-full ${!(dirty && isValid) ? "" : "bg-green"}`}
               >
                 Make Appointment
               </button>
