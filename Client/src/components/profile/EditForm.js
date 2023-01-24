@@ -1,23 +1,28 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import  Cookies  from "js-cookie";
 
 import { ProfileSchema } from "../../validators/Validate";
 import { putProfile } from "../../services/ProfileService";
 
 const EditForm = ({ setNeedsEdit, data }) => {
+  const queryClient = useQueryClient();
+  const userName = Cookies.get("UserName");
+
   const mutation = useMutation({
     mutationFn: async values => {
-      await putProfile(values)
-      backToProfile();
+      await putProfile(values);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["profile"]});
+      return backToProfile();
     },
     onError: (error) => {
       console.log("query error", error);
     }
   });
 
-  const userName = Cookies.get("UserName");
   const { firstName, lastName, city, zipCode, bio } = data;
 
   const userData = {

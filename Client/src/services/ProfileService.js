@@ -17,7 +17,8 @@ export const putProfile = async (reqObj) => {
   const token = Cookies.get("X-Access-Token");
   const id = Cookies.get("Id");
   try {
-    axios.put(`/api/Users/${id}`, reqObj ,  { headers: { authorization: `bearer ${token}`}})
+    const response = await axios.put(`/api/Users/${id}`, reqObj ,  { headers: { authorization: `bearer ${token}`}})
+    return response.data;
   } catch(err) {
     console.log(err)
   };

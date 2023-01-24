@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { putAppointment } from "../../services/AppointmentService";
 import AppointmentForm from "./AppointmentForm";
@@ -11,10 +11,6 @@ const SingleAppointment = (appointment) => {
     setFormView(!formView);
   };
 
-  useEffect(() => {
-    console.log("trainerId", trainerId)
-  })
-
   return (
     <div className="border rounded-sm m-4">
       <div className="flex justify-between">
@@ -22,7 +18,7 @@ const SingleAppointment = (appointment) => {
           {address === null ? "Add address" : address}
         </p>
         <p className="p-2 font-semibold">
-          {appointmentDate}
+          {appointmentDate === null ? "Add Date" : appointmentDate}
         </p>
       </div>
       {formView ? 
