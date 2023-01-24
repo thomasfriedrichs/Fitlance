@@ -3,11 +3,26 @@ import { Form, Formik } from "formik";
 import Cookies  from "js-cookie";
 
 import { AppointmentSchema } from "../../validators/Validate";
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 
 const AppointmentForm = props => {
   const userId = Cookies.get("Id");
   const currentDate = new Date().toLocaleDateString();
   const { toggleView, query, reqType, trainerId, address, appointmentDate, id } = props;
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async values => {
+      await reqType === "put" ? query( id , values ) : query(values);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getAppointments"]});
+      return toggleView();
+    },
+    onError: (error) => {
+      console.log("query error", error);
+    }
+  });
 
   const initialValues = {
     clientId: userId,
@@ -18,21 +33,11 @@ const AppointmentForm = props => {
     isActive: true
   };
 
-  const onPut = (values) => {
-    query(id, values);
-    toggleView();
-  };
-
-  const onPost = (values) => {
-    query(values)
-    toggleView();
-  };
-
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={AppointmentSchema}
-      onSubmit={reqType === "put" ? onPut : onPost}
+      onSubmit={mutation.mutate}
       enableReinitialize={true}
     >
       {(formik) => {
